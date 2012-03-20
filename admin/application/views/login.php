@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Oleg Lukashev CMS</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+            <link rel="stylesheet" href="/admin/css/reset.css" />
+            <link rel="stylesheet" href="/admin/css/main.css" />
+            <link rel="stylesheet" href="/admin/css/jquery-ui-1.8.17.custom.css" />
+            <script type="text/javascript" src="/admin/js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="/admin/js/validForms.js"></script>
+    </head>
+<body>
+<div id="carcas">
+    <div class="wrapper">
+        <div class="content">
+            <div class="login_wrap">
+                <form action=""  method="POST">
+                    <div class="login_item">
+                        <label>Name:</label>
+                        <input class="text" name="name" type="text" maxlength="250" />
+                    </div>
+                    <div class="login_item">
+                        <label>Password:</label>
+                        <input class="text" name="password" type="password" maxlength="250" />
+                    </div>
+                    <div class="buttons_wrap">
+                        <input type="hidden" name="send" value="1" />
+                        <input class="button" type="submit" value="Send">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    var authUser = new validForm($('div.login_wrap form'),
+        {
+            name: /[-a-z0-9!#$%&'*+/=?^_`{|}~]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*/,
+            password: /^[a-zA-Z0-9_\-\.]{6,}$/
+        });
+</script>

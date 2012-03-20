@@ -1,0 +1,34 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+
+class Controller_Login extends Controller_Mainlogin {
+
+    public $template = 'login';
+
+    public function action_index()
+    {
+        $post = $this->request->post();
+        if (isset($post['email']) && isset($post['password']))
+        {
+            $model_login = new Model_Login();
+            $email     = $post['email'];
+            $password = $post['password'];
+
+            if ($model_login->checkUser($email, $password))
+            {
+                $user = Auth::instance()->login($email, $password);
+                
+                if ($user)
+                {
+                    echo 1;
+                }
+                else
+                {
+                    echo 0;
+                }
+                return false;
+
+                Request::current()->redirect('/categories/');
+            }
+        }
+    }
+}
