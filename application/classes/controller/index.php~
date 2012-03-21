@@ -1,0 +1,13 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+
+class Controller_Welcome extends Controller_Template {
+
+        public $template = 'main';
+
+	public function action_index()
+	{
+            //$this->response->body('hello, world!');
+            //$smarty->assign('content','content');
+            //$smarty->display('template_main.tpl');
+	}
+} // End Welcome
