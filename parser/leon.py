@@ -5,6 +5,7 @@ import lxml.html
 import MySQLdb
 import requests
 import datetime
+import psycopg2
 
 teams = {
     'Амкар': ['Амкар'],
@@ -39,16 +40,12 @@ def checkTeam(team_str_from_site):
             if (access == len(value_team)):
                 return key_team
 
-
 page = urllib.urlopen("https://ru.leonbets.com/betoffer/1/6074")
 doc = lxml.html.document_fromstring(page.read())
 
-print doc
 
-
-db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="bets_agregator", charset='utf8')
+db = psycopg2.connect("dbname='bets' user='root' host='localhost' password='050419902'")
 cursor = db.cursor()
-
 
 line_time = 0
 match_id = 0
@@ -74,10 +71,10 @@ for lines in doc.cssselect('tbody'):
 
         title = t1 + " - " + t2
 
-        cursor.execute ("INSERT INTO matches (title, time) VALUES(%s, %s)", (title, line_time))
+        cursor.execute("INSERT INTO matches (title, time) VALUES(%s, %s)", (title, line_time))
 
 
-        cursor.execute ("INSERT INTO bets (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
+        cursor.execute("INSERT INTO bets (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 
         match_id += 1
 
