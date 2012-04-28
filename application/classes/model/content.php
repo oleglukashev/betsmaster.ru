@@ -2,14 +2,20 @@
 
 class Model_Content extends Model
 {
-    public function getContent($url)
+    public function getSportTypes()
     {
         $request = DB::select()
-            ->from('categories')
-            ->join('materials')
-            ->on('categories.material_id', '=', 'materials.id')
-            ->where('url', '=', $url)
-            ->limit(1)
+            ->from('sport')
+            ->execute()
+            ->as_array();
+
+        return $request;
+    }
+
+    public function getChallenge()
+    {
+        $request = DB::select()
+            ->from('challenge')
             ->execute()
             ->as_array();
 

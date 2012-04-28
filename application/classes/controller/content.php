@@ -9,11 +9,7 @@ class Controller_Content extends Controller_Main {
         $this->model = new Model_Content();
 
         $url = $this->request->param('url');
-        $this->template->content = $this->getContent($url);
-    }
-
-    public function getContent($url)
-    {
-        return $this->model->getContent($url);
+        $this->template->sport_types = $this->model->getSportTypes();
+        $this->template->challenge = $this->model->getChallenge();
     }
 } // End Welcome
