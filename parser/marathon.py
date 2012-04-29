@@ -62,8 +62,8 @@ def time_conversion( str ):
         month = months_list[split_str[1]]
         year = date_now.strftime("%Y")
 
-
     return  year + "-" + month + "-" + day + " " + time
+
 
 page = urllib.urlopen("http://www.marathonbet.com/ru/betting/634268,634269")
 doc = lxml.html.document_fromstring(page.read())
@@ -72,24 +72,27 @@ db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db
 cursor = db.cursor()
 
 challenge_id = 0;
+match_id = 0
+kontora = 'marathonbet.com'
+
 for tables in doc.cssselect('table.foot-market > tbody tr.event-header'):
-    row_in_mass = []
-    i = 0
-    for rows in tables.cssselect('tr.event-header > td'):
-        if (i == 0):
-            team = rows.cssselect('table tr:nth-child(1) td:nth-child(1) span div')
-            title = checkTeam(team[0].text.encode('utf-8')) + " - " + checkTeam(team[1].text.encode('utf-8'))
-            row_in_mass.append(title)
+    t1 = tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[0].text.encode('utf-8')
+    t2 = tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[1].text.encode('utf-8')
 
-            time_match = time_conversion(rows.cssselect('table tr:nth-child(1) td.date')[0].text.encode('utf-8').strip(" \r\n"))
-            row_in_mass.append(time_match)
-        else:
-            row_in_mass.append(rows.cssselect('a')[0].text.encode('utf-8').strip(" \r\n").strip(" \t"))
+    title = checkTeam(t1) + " - " + checkTeam(t2)
+    time = time_conversion(tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.date')[0].text.encode('utf-8').strip(" \r\n"))
+    first = tables.cssselect('tr.event-header > td:nth-child(2) a')[0].text.encode('utf-8').strip(" \r\n")
+    x = tables.cssselect('tr.event-header > td:nth-child(3) a')[0].text.encode('utf-8').strip(" \r\n")
+    second = tables.cssselect('tr.event-header > td:nth-child(4) a')[0].text.encode('utf-8').strip(" \r\n")
+    first_x = tables.cssselect('tr.event-header > td:nth-child(5) a')[0].text.encode('utf-8').strip(" \r\n")
+    first_second = tables.cssselect('tr.event-header > td:nth-child(6) a')[0].text.encode('utf-8').strip(" \r\n")
+    x_second = tables.cssselect('tr.event-header > td:nth-child(7) a')[0].text.encode('utf-8').strip(" \r\n")
+    team1_coef = tables.cssselect('tr.event-header > td:nth-child(8) a')[0].text.encode('utf-8').strip(" \r\n")
+    team2_coef = tables.cssselect('tr.event-header > td:nth-child(9) a')[0].text.encode('utf-8').strip(" \r\n")
 
-        i += 1
-    i = 0
+    #cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time))
 
-    cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time_match))
+    #cursor.execute ("INSERT INTO coefficients (kontora_name, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 
 db.commit()
 db.close()
