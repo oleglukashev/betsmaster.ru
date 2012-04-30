@@ -7,24 +7,25 @@ import requests
 import time
 import datetime
 
+
 teams = {
-    'Амкар': ['Амкар'],
-    'Анжи': ['Анжи'],
-    'Волга': ['Волга', 'Н'],
-    'Динамо М': ['Динамо', 'М'],
-    'Зенит': ['Зенит'],
-    'Краснодар': ['Краснодар'],
+    'Амкар (Пермь)': ['Амкар'],
+    'Анжи (Махачкала)': ['Анжи'],
+    'Волга (Нижний Новгород)': ['Волга', 'Н'],
+    'Динамо (Москва)': ['Динамо', 'М'],
+    'Зенит (Санкт-Петербург)': ['Зенит'],
+    'Краснодар (Краснодар)': ['Краснодар'],
     'Крылья Советов': ['К', 'Советов'],
-    'Кубань': ['Кубань'],
+    'Кубань (Краснодар)': ['Кубань'],
     'Локомотив М': ['Локомотив', 'М'],
     'Ростов': ['Ростов'],
-    'Рубин': ['Рубин'],
-    'Спартак М': ['Спартак', 'М'],
-    'Спартак Н': ['Спартак', 'Н'],
-    'Терек': ['Терек'],
-    'Томь': ['Томь'],
-    'ЦСКА': ['ЦСКА']
-    }
+    'Рубин (Казань)': ['Рубин'],
+    'Спартак (Москва)': ['Спартак', 'М'],
+    'Спартак (Нальчик)': ['Спартак', 'Н'],
+    'Терек (Грозный)': ['Терек'],
+    'Томь (Томск)': ['Томь'],
+    'ЦСКА (Москва)': ['ЦСКА']
+}
 
 def checkTeam(team_str_from_site):
     for key_team, value_team in teams.items():
@@ -41,18 +42,23 @@ def checkTeam(team_str_from_site):
                 return key_team
 
 
-payload = {'gcheck':9, 'line_id[0]':25802, 'line_id[1]': 25819, 'time':1}
+payload = {'gcheck':9, 'line_id[0]':25805, 'line_id[1]': 25818, 'time':1}
 page = requests.post("http://betcityru.com/bets/bets2.php?rnd=1333553020", data=payload)
 
 doc = lxml.html.document_fromstring(page.content)
 
-db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="bets_agregator", charset='utf8')
+db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="betsmaster", charset='utf8')
 cursor = db.cursor()
 
 
+challenge_id = 0;
 line_time = 0
 match_id = 0
 kontora = "betcityru.com"
+
+cursor.execute ("SELECT title FROM matches  WHERE challenge_id = %s", (challenge_id))
+data = cursor.fetchall()
+
 
 for lines in doc.cssselect('tbody'):
     if (lines.get('class') == "date"):
@@ -74,10 +80,15 @@ for lines in doc.cssselect('tbody'):
 
         title = t1 + " - " + t2
 
-        cursor.execute ("INSERT INTO matches (title, time) VALUES(%s, %s)", (title, line_time))
+        occurrence = 1
+        for row in data:
+            if (row[0].encode('utf-8') == title):
+                occurrence = 0
 
+        if (occurrence):
+            cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, line_time))
 
-        cursor.execute ("INSERT INTO bets (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
+        #cursor.execute ("INSERT INTO coefficients (kontora_name, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 
         match_id += 1
 

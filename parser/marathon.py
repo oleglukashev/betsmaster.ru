@@ -75,6 +75,9 @@ challenge_id = 0;
 match_id = 0
 kontora = 'marathonbet.com'
 
+cursor.execute ("SELECT title FROM matches  WHERE challenge_id = %s", (challenge_id))
+data = cursor.fetchall()
+
 for tables in doc.cssselect('table.foot-market > tbody tr.event-header'):
     t1 = tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[0].text.encode('utf-8')
     t2 = tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[1].text.encode('utf-8')
@@ -90,7 +93,13 @@ for tables in doc.cssselect('table.foot-market > tbody tr.event-header'):
     team1_coef = tables.cssselect('tr.event-header > td:nth-child(8) a')[0].text.encode('utf-8').strip(" \r\n")
     team2_coef = tables.cssselect('tr.event-header > td:nth-child(9) a')[0].text.encode('utf-8').strip(" \r\n")
 
-    #cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time))
+    occurrence = 1
+    for row in data:
+        if (row[0].encode('utf-8') == title):
+            occurrence = 0
+
+    if (occurrence):
+        cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time))
 
     #cursor.execute ("INSERT INTO coefficients (kontora_name, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 
