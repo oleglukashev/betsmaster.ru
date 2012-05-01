@@ -7,40 +7,12 @@ import lxml.html
 import requests
 import MySQLdb
 import datetime
+import CParser
+from teams import teams
 
 
 #FOR MARATHON
-teams = {
-    'Амкар (Пермь)': ['Амкар'],
-    'Анжи (Махачкала)': ['Анжи'],
-    'Волга (Нижний Новгород)': ['Волга', 'Н'],
-    'Динамо (Москва)': ['Динамо', 'М'],
-    'Зенит (Санкт-Петербург)': ['Зенит'],
-    'Краснодар (Краснодар)': ['Краснодар'],
-    'Крылья Советов': ['К', 'Советов'],
-    'Кубань (Краснодар)': ['Кубань'],
-    'Локомотив М': ['Локомотив', 'М'],
-    'Ростов': ['Ростов'],
-    'Рубин (Казань)': ['Рубин'],
-    'Спартак (Москва)': ['Спартак', 'М'],
-    'Спартак (Нальчик)': ['Спартак', 'Н'],
-    'Терек (Грозный)': ['Терек'],
-    'Томь (Томск)': ['Томь'],
-    'ЦСКА (Москва)': ['ЦСКА']
-}
-def checkTeam(team_str_from_site):
-    for key_team, value_team in teams.items():
-        access = 0
-        for part_of_name_team in value_team:
-            key = 0
-            for part_of_name_team_site in team_str_from_site.split(" "):
-                if (part_of_name_team_site.lower().find(part_of_name_team.lower()) == 0):
-                    access += 1
 
-            key += 1
-
-            if (access == len(value_team)):
-                return key_team
 
 def time_conversion( str ):
     time = ''
@@ -69,20 +41,20 @@ page = urllib.urlopen("http://www.marathonbet.com/ru/betting/634268,634269")
 doc = lxml.html.document_fromstring(page.read())
 
 db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="betsmaster", charset='utf8')
-cursor = db.cursor()
+request = db.cursor()
 
 challenge_id = 0;
 match_id = 0
 kontora = 'marathonbet.com'
 
-cursor.execute ("SELECT title FROM matches  WHERE challenge_id = %s", (challenge_id))
-data = cursor.fetchall()
+request.execute ("SELECT title FROM matches  WHERE challenge_id = %s", (challenge_id))
+data = request.fetchall()
 
 for tables in doc.cssselect('table.foot-market > tbody tr.event-header'):
-    t1 = tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[0].text.encode('utf-8')
-    t2 = tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[1].text.encode('utf-8')
+    t1 = CParser.parser_team_from_str(tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[0].text.encode('utf-8'), teams)
+    t2 = CParser.parser_team_from_str(tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.name span div')[1].text.encode('utf-8'), teams)
 
-    title = checkTeam(t1) + " - " + checkTeam(t2)
+    title = t1 + " - " + t2
     time = time_conversion(tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.date')[0].text.encode('utf-8').strip(" \r\n"))
     first = tables.cssselect('tr.event-header > td:nth-child(2) a')[0].text.encode('utf-8').strip(" \r\n")
     x = tables.cssselect('tr.event-header > td:nth-child(3) a')[0].text.encode('utf-8').strip(" \r\n")
@@ -99,7 +71,7 @@ for tables in doc.cssselect('table.foot-market > tbody tr.event-header'):
             occurrence = 0
 
     if (occurrence):
-        cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time))
+        request.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time))
 
     #cursor.execute ("INSERT INTO coefficients (kontora_name, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 

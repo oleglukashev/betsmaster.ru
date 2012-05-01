@@ -6,41 +6,9 @@ import MySQLdb
 import requests
 import time
 import datetime
-
-
-teams = {
-    'Амкар (Пермь)': ['Амкар'],
-    'Анжи (Махачкала)': ['Анжи'],
-    'Волга (Нижний Новгород)': ['Волга', 'Н'],
-    'Динамо (Москва)': ['Динамо', 'М'],
-    'Зенит (Санкт-Петербург)': ['Зенит'],
-    'Краснодар (Краснодар)': ['Краснодар'],
-    'Крылья Советов': ['К', 'Советов'],
-    'Кубань (Краснодар)': ['Кубань'],
-    'Локомотив М': ['Локомотив', 'М'],
-    'Ростов': ['Ростов'],
-    'Рубин (Казань)': ['Рубин'],
-    'Спартак (Москва)': ['Спартак', 'М'],
-    'Спартак (Нальчик)': ['Спартак', 'Н'],
-    'Терек (Грозный)': ['Терек'],
-    'Томь (Томск)': ['Томь'],
-    'ЦСКА (Москва)': ['ЦСКА']
-}
-
-def checkTeam(team_str_from_site):
-    for key_team, value_team in teams.items():
-        access = 0
-        for part_of_name_team in value_team:
-            key = 0
-            for part_of_name_team_site in team_str_from_site.split(" "):
-                if (part_of_name_team_site.lower().find(part_of_name_team.lower()) == 0):
-                    access += 1
-
-            key += 1
-
-            if (access == len(value_team)):
-                return key_team
-
+from teams import teams
+#include classes
+import CParser
 
 payload = {'gcheck':9, 'line_id[0]':25805, 'line_id[1]': 25818, 'time':1}
 page = requests.post("http://betcityru.com/bets/bets2.php?rnd=1333553020", data=payload)
@@ -65,8 +33,8 @@ for lines in doc.cssselect('tbody'):
         line_date = lines.cssselect('tr td')[0].text.encode("utf-8")
 
     if (lines.get('id') == "line"):
-        t1 = checkTeam(lines.cssselect('td:nth-child(2) b')[0].text.encode('utf-8'))
-        t2 = checkTeam(lines.cssselect('td:nth-child(5) b')[0].text.encode('utf-8'))
+        t1 = CParser.parser_team_from_str(lines.cssselect('td:nth-child(2) b')[0].text.encode('utf-8'), teams)
+        t2 = CParser.parser_team_from_str(lines.cssselect('td:nth-child(5) b')[0].text.encode('utf-8'), teams)
 
         line_time =  datetime.datetime.strptime(line_date + " " + lines.cssselect('td:nth-child(1)')[0].text.encode('utf-8') + ":00", "%d.%m.%Y %H:%M:%S")
         team1_coef = lines.cssselect('td:nth-child(4) a')[0].text.encode('utf-8')
