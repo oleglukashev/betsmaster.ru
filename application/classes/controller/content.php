@@ -11,5 +11,6 @@ class Controller_Content extends Controller_Main {
         $url = $this->request->param('url');
         $this->template->sport_types = $this->model->getSportTypes();
         $this->template->challenge = $this->model->getChallenge();
+        $this->template->matches = $this->model->getMatchesGroupByTime($this->model->getMatches());
     }
 } // End Welcome

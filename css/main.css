@@ -131,6 +131,12 @@ div.challenge_item a
 }
 
 /*match item css*/
+p.matches_date
+{
+    padding:15px 0 0 10px;
+    margin-bottom:15px;
+}
+
 div.matches_wrap
 {
     border-top:1px solid #C7E0E8;
@@ -155,11 +161,17 @@ div.match_item_open:hover
     background-color:#fff;
 }
 
+p.match_time
+{
+    float:left;
+}
+
 p.match_title
 {
     float:left;
     font-size:13px;
     font-weight:bold;
+    margin-left:15px;
 }
 
 p.match_info_more

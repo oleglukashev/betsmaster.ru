@@ -6,15 +6,21 @@
 </div>
 <div class="content_box">
     <div class="col1">
-        <div class="matches_wrap">
-            <div class="match_item">
-                <p class="match_title">Спартак (Москва) - Локомотив (Москва)</p>
-                <p class="match_info_more"></p>
-                <div class="clear"></div>
-                <div class="match_description">
-                </div>
+        <?foreach($matches as $key=>$item):?>
+            <p class="matches_date"><?=$key;?></p>
+            <div class="matches_wrap">
+                <?foreach($item as $i):?>
+                    <div class="match_item">
+                        <p class="match_time"><?=date("H:i", strtotime($i['time']));?></p>
+                        <p class="match_title"><?=$i['title']?></p>
+                        <p class="match_info_more"></p>
+                        <div class="clear"></div>
+                        <div class="match_description">
+                        </div>
+                    </div>
+                <?endforeach;?>
             </div>
-        </div>
+        <?endforeach;?>
     </div>
     <div class="col2">
         <div class="col2_wrap">
