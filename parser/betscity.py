@@ -16,9 +16,7 @@ import CParser
 config_file = open('config/betscity.xml', 'r')
 config = config_file.read()
 config_file.close()
-
 config_all_dom = parseString(config)
-
 config_sections = config_all_dom.getElementsByTagName('section')
 
 for section in config_sections:
@@ -35,6 +33,10 @@ for section in config_sections:
     db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="betsmaster", charset='utf8')
     cursor = db.cursor()
 
+    today = datetime.date.today()
+    today_format = today.strftime("%Y-%m-%d %H:%M:%S")
+    sql = "DELETE FROM matches, coefficients USING matches, coefficients WHERE matches.time < '%s' AND matches.id = coefficients.match_id" % today_format
+    cursor.execute(sql)
 
     line_time = 0
     match_id = 0
