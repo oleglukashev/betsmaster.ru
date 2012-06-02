@@ -7,19 +7,16 @@ import requests
 import time
 import datetime
 from teams import teams
-from xml.dom.minidom import parseString
 #include classes
 import CParser
+import Config
 
+config = Config.getConfig( 'config/betscity.xml', 'section')
 
-"""insert config"""
-config_file = open('config/betscity.xml', 'r')
-config = config_file.read()
-config_file.close()
-config_all_dom = parseString(config)
-config_sections = config_all_dom.getElementsByTagName('section')
+db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="betsmaster", charset='utf8')
+cursor = db.cursor()
 
-for section in config_sections:
+for section in config:
     challenge_id = int(section.getElementsByTagName('challenge_id')[0].getAttribute('value'))
     sport_id = int(section.getElementsByTagName('sport_id')[0].getAttribute('value'))
 
@@ -30,8 +27,6 @@ for section in config_sections:
 
     doc = lxml.html.document_fromstring(page.content)
 
-    db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db="betsmaster", charset='utf8')
-    cursor = db.cursor()
 
     today = datetime.date.today()
     today_format = today.strftime("%Y-%m-%d %H:%M:%S")
@@ -77,8 +72,8 @@ for section in config_sections:
 
             match_id += 1
 
-    db.commit()
-    db.close()
+db.commit()
+db.close()
 
 
 
