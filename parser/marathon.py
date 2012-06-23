@@ -47,7 +47,12 @@ challenge_id = 0;
 match_id = 0
 kontora = 'marathonbet.com'
 
-request.execute ("SELECT title FROM matches  WHERE challenge_id = %s", (challenge_id))
+time_now_obj = datetime.datetime.now();
+time_now_str = time_now_obj.strftime("%Y-%m-%d %H:%M:%S")
+
+request.execute ("DELETE * FROM matches WHERE time < '"time_now_str"' + time_now_str + ";")
+
+request.execute ("SELECT title FROM matches WHERE challenge_id = %s", (challenge_id))
 data = request.fetchall()
 
 for tables in doc.cssselect('table.foot-market > tbody tr.event-header'):
