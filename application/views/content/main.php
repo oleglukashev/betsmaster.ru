@@ -1,54 +1,67 @@
 <?=$header;?>
-<div class="header_box">
-    <div class="header_box_wrap">
-        <div class="main_logo"><a href="/"><img src="/images/logo.png" /></a></div>
+<div id="carcas-wrap">
+    <div class="header-wrap">
     </div>
-</div>
-<div class="content_box">
-    <div class="col1">
-        <?foreach($matches as $key=>$item):?>
-            <p class="matches_date"><?=$key;?></p>
-            <div class="matches_wrap">
-                <?foreach($item as $i):?>
-                    <div class="match_item">
-                        <p class="match_time"><?=date("H:i", strtotime($i['time']));?></p>
-                        <p class="match_title"><?=$i['title']?></p>
-                        <p class="match_info_more"></p>
-                        <div class="clear"></div>
-                        <div class="match_description">
-                        </div>
+    <div class="content-wrap">
+        <div class="col1-wrap">
+            <h1>События</h1>
+            <div class="matches-list-wrap">
+                <div class="matches-date">
+                    <p>30</p>
+                    <p>сентября</p>
+                </div>
+                <div class="match-item-wrap match-even">
+                    <p class="match-time">20:00</p>
+                    <div class="match-teams-wrap">
+                        <div>Спартак М.</div>
+                        <div class="match-teams-vs">&mdash;</div>
+                        <div>Локомотив М.</div>
                     </div>
-                <?endforeach;?>
+                </div>
+                <div class="match-item-wrap match-odd">
+                    <p class="match-time">20:00</p>
+                    <div class="match-teams-wrap">
+                        <div>Спартак М.</div>
+                        <div class="match-teams-vs">&mdash;</div>
+                        <div>Локомотив М.</div>
+                    </div>
+                </div>
             </div>
-        <?endforeach;?>
-    </div>
-    <div class="col2">
-        <div class="col2_wrap">
+        </div>
+        <div class="col2-wrap">
             <h2>Категории</h2>
-            <div class="category_wrap">
+            <div class="category-wrap">
                 <ul>
-                    <?foreach($sport_types as $s):?>
-                        <li class="category_item"><a href="javascript://"><?=$s['title'];?></a>
-                            <div class="challenge_item">
-                                <ul>
-                                    <?
-                                    $sport_id = $s['id'];
-                                    if (isset($challenge[$sport_id]))
-                                    {
-                                        foreach($challenge as $c)
-                                        {
-                                            echo "<li><a href='javascript://'>" . $c['title'] . "</a></li>";
-                                        }
-                                    }
-                                    ?>
-                                </ul>
-                            </div>
-                        </li>
-                    <?endforeach;?>
+                    <li class="category-select">
+                        <p><span>Футбол</span></p>
+                        <ul>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li class="subcategory-select"><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                            <li><span>Чемпионат России</span></li>
+                        </ul>
+                    </li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
+                    <li><span>Футбол</span></li>
                 </ul>
             </div>
         </div>
     </div>
+    <div class="footer-wrap">
+    </div>
+
 </div>
 <script type="text/javascript">
     $('div.match_item').toggle(function() {
@@ -70,4 +83,5 @@
     }, function() {
         $(this).next().slideUp(100);
     });
+
 </script>

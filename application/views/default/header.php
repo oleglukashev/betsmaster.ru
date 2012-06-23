@@ -15,6 +15,3 @@
     <?endforeach;?>
 </head>
 <body>
-<div id="carcas">
-    <div class="wrapper">
-        
