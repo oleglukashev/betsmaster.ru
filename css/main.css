@@ -75,7 +75,7 @@ div.header-wrap
 
 div.content-wrap
 {
-    width:903px;
+    width:900px;
     padding:25px 20px;
     margin:0 auto;
     background-color:#f5f5f5;
@@ -86,6 +86,7 @@ div.content-wrap
     -webkit-box-shadow: 0px 2px 2px 0px #888;
     box-shadow: 0px 2px 2px 0px #888;
     border-top:1px solid #fff;
+    font-size:0;
 }
 
 div.col1-wrap,
