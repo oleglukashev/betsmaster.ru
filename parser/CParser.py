@@ -11,3 +11,4 @@ def parser_team_from_str( team_name_str, teams_list ):
 
             if (access == len(value_team)):
                 return key_team
+    return 0

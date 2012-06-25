@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Oleg Lukashev CMS</title>
+    <title>betsmaster.ru | смотри все ставки в одном месте</title>
     <meta name="description" content="<?=$meta_description?>">
     <meta name="keywords" content="<?=$meta_keywords?>">
 
