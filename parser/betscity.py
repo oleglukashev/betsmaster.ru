@@ -17,12 +17,13 @@ db = MySQLdb.connect(host="localhost", user="root", passwd="asa44wefdfSHSSd", db
 cursor = db.cursor()
 
 for section in config:
+    section_id = int(section.getElementsByTagName('id')[0].getAttribute('value'))
     challenge_id = int(section.getElementsByTagName('challenge_id')[0].getAttribute('value'))
     sport_id = int(section.getElementsByTagName('sport_id')[0].getAttribute('value'))
 
     teams_for_challenge = teams[sport_id][challenge_id]
 
-    payload = {'gcheck':9, 'line_id[0]': section.getElementsByTagName('id')[0].getAttribute('value'), 'time':1}
+    payload = {'gcheck':9, 'line_id[0]': section_id, 'time':1}
     page = requests.post("http://betcityru.com/bets/bets2.php?rnd=1333553020", data=payload)
 
     doc = lxml.html.document_fromstring(page.content)
@@ -48,7 +49,7 @@ for section in config:
             t1 = CParser.parser_team_from_str(lines.cssselect('td:nth-child(2) b')[0].text.encode('utf-8'), teams_for_challenge)
             t2 = CParser.parser_team_from_str(lines.cssselect('td:nth-child(5) b')[0].text.encode('utf-8'), teams_for_challenge)
 
-            line_time =  datetime.datetime.strptime(line_date + " " + lines.cssselect('td:nth-child(1)')[0].text.encode('utf-8') + ":00", "%d.%m.%Y %H:%M:%S")
+            line_time =  CParser.time_conversion_for_betscity(line_date, lines.cssselect('td:nth-child(1)')[0].text.encode('utf-8'))
             team1_coef = lines.cssselect('td:nth-child(4) a')[0].text.encode('utf-8')
             team2_coef = lines.cssselect('td:nth-child(7) a')[0].text.encode('utf-8')
             first = lines.cssselect('td:nth-child(8) a')[0].text.encode('utf-8')
