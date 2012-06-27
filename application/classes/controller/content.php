@@ -12,5 +12,7 @@ class Controller_Content extends Controller_Main {
         $this->template->sport_types = $this->model->getSportTypes();
         $this->template->challenge = $this->model->getChallenge();
         $this->template->matches = $this->model->getMatchesGroupByTime($this->model->getMatches());
+        $this->template->bets = $this->model->getBets();
+        $this->template->coefficients = $this->model->getCoefficients();
     }
 } // End Welcome

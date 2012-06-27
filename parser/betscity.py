@@ -36,7 +36,7 @@ for section in config:
 
     line_time = 0
     match_id = 0
-    kontora = "betcityru.com"
+    bets_id = 0
 
     cursor.execute ("SELECT title FROM matches  WHERE challenge_id = %s", (challenge_id))
     data = cursor.fetchall()
@@ -69,7 +69,7 @@ for section in config:
             if (occurrence):
                 cursor.execute ("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, line_time))
 
-            cursor.execute ("INSERT INTO coefficients (kontora_name, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
+            cursor.execute ("INSERT INTO coefficients (bets_id, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (bets_id, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 
             match_id += 1
 

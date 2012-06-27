@@ -62,5 +62,21 @@ class Model_Content extends Model
 
         return $matches_group_by_time;
     }
+
+    public function getBets()
+    {
+        return DB::select()
+            ->from('bets')
+            ->execute()
+            ->as_array();
+    }
+
+    public function getCoefficients()
+    {
+        return DB::select()
+            ->from('coefficients')
+            ->execute()
+            ->as_array();
+    }
 }
 ?>

@@ -22,7 +22,15 @@
                                     <div><?=$match['team2'];?></div>
                                 </div>
                             </div>
-                            <div class="match-item-content"></div>
+                            <div class="match-item-content">
+                                <table>
+                                    <?foreach($bets as $b):?>
+                                        <tr>
+                                            <td><?=$b['name'];?></td>
+                                        </tr>
+                                    <?endforeach;?>
+                                </table>
+                            </div>
                         </div>
                         <!--last elemrnt-->
                         <?if ($key == (count($date['matches']) - 1)):?>

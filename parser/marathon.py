@@ -28,7 +28,7 @@ for section in config:
     teams_for_challenge = teams[sport_id][challenge_id]
 
     match_id = 0
-    kontora = 'marathonbet.com'
+    bets_id = 1
 
     today = datetime.date.today()
     today_format = today.strftime("%Y-%m-%d %H:%M:%S")
@@ -45,14 +45,14 @@ for section in config:
 
         title = t1 + " - " + t2
         time = CParser.time_conversion_for_marathon(tables.cssselect('tr.event-header > td.first > table > tr:nth-child(1) td.date')[0].text.encode('utf-8').strip(" \r\n"))
-        first = tables.cssselect('tr.event-header > td:nth-child(2) span')[0].text.encode('utf-8').strip(" \r\n")
-        x = tables.cssselect('tr.event-header > td:nth-child(3) span')[0].text.encode('utf-8').strip(" \r\n")
-        second = tables.cssselect('tr.event-header > td:nth-child(4) span')[0].text.encode('utf-8').strip(" \r\n")
-        first_x = tables.cssselect('tr.event-header > td:nth-child(5) span')[0].text.encode('utf-8').strip(" \r\n")
-        first_second = tables.cssselect('tr.event-header > td:nth-child(6) span')[0].text.encode('utf-8').strip(" \r\n")
-        x_second = tables.cssselect('tr.event-header > td:nth-child(7) span')[0].text.encode('utf-8').strip(" \r\n")
-        team1_coef = tables.cssselect('tr.event-header > td:nth-child(8) span')[0].text.encode('utf-8').strip(" \r\n")
-        team2_coef = tables.cssselect('tr.event-header > td:nth-child(9) span')[0].text.encode('utf-8').strip(" \r\n")
+        first = tables.cssselect('tr.event-header > td:nth-child(2) span')[0].text.encode('utf-8')
+        x = tables.cssselect('tr.event-header > td:nth-child(3) span')[0].text.encode('utf-8')
+        second = tables.cssselect('tr.event-header > td:nth-child(4) span')[0].text.encode('utf-8')
+        first_x = tables.cssselect('tr.event-header > td:nth-child(5) span')[0].text.encode('utf-8')
+        first_second = tables.cssselect('tr.event-header > td:nth-child(6) span')[0].text.encode('utf-8')
+        x_second = tables.cssselect('tr.event-header > td:nth-child(7) span')[0].text.encode('utf-8')
+        team1_coef = tables.cssselect('tr.event-header > td:nth-child(8) span')[0].text.encode('utf-8')
+        team2_coef = tables.cssselect('tr.event-header > td:nth-child(9) span')[0].text.encode('utf-8')
 
         first = re.sub("\s*\n\s*", ' ', first.strip())
         x = re.sub("\s*\n\s*", ' ', x.strip())
@@ -71,7 +71,7 @@ for section in config:
         if (occurrence):
             cursor.execute("INSERT INTO matches (challenge_id, title, time) VALUES(%s, %s, %s)", (challenge_id, title, time))
 
-        cursor.execute("INSERT INTO coefficients (kontora_name, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (kontora, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
+        cursor.execute("INSERT INTO coefficients (bets_id, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (bets_id, match_id, team1_coef, team2_coef, first, x, second, first_x, first_second, x_second))
 
         match_id += 1
 
